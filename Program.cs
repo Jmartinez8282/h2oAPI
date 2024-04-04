@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity.Data;
 using h2oAPI.Data;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -98,10 +99,24 @@ app.MapGet("/api/questions",async (AppDbContext dbContext, int teamId) =>
     return Results.Ok(questions);
 });
 
+//Scores endpoint
+app.MapPost("/api/scores",async (AppDbContext dbContext, ScoreRequest request)=> 
+{
+    var score = new Score
+    {
+        UserID = request.UserID,
+        QuestionId = request.QuestionID,
+        TeamID = request.TeamID,
+        Competition = request.Competition,
+        ScoreValue = request.ScoreValue
+    };
+});
 
 
 
 app.Run();
 
-
+//Request models
+record LoginRequest(string Email,string Password);
+record ScoreRequest(int UserID, int QuestionID,int TeamID,string Competition, int ScoreValue);
 //Using Minimail API
