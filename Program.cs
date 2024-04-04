@@ -6,7 +6,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity.Data;
 using h2oAPI.Data;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.Extensions.Configuration.UserSecrets;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -83,14 +83,14 @@ app.MapPost("/api/login",async (AppDbContext dbContext, LoginRequest request) =>
 //Teams endpoint
 app.MapGet("/api/teams", async (AppDbContext dbContext, string competition, string division ) =>
 {
-    var teams = await dbContext.Teams.Where(t => t.Competition == competition && t.Division == division.ToList());
+    var teams = await dbContext.Teams.Where(t => t.Competition == competition && t.Division == division).ToList();
     return Results.Ok(teams);
 });
 
 //Questions endpoint
 app.MapGet("/api/questions",async (AppDbContext dbContext, int teamId) => 
 {
-    var team = await dbContext.Teams.FirstOrDefaultAsync(t => t.TeamId == teamId);
+    var team = await dbContext.Teams.FirstOrDefaultAsync(t => t.TeamID == teamId);
     if(team == null)
     {
         return Results.BadRequest("Invalid TeamID");
@@ -102,19 +102,33 @@ app.MapGet("/api/questions",async (AppDbContext dbContext, int teamId) =>
 //Scores endpoint
 app.MapPost("/api/scores",async (AppDbContext dbContext, ScoreRequest request)=> 
 {
-    var score = new Score
+    var  score = new Score
     {
         UserID = request.UserID,
-        QuestionId = request.QuestionID,
+        QuestionID = request.QuestionID,
         TeamID = request.TeamID,
         Competition = request.Competition,
         ScoreValue = request.ScoreValue
     };
+
+    await dbContext.Scores.AddAsync(score);
+    await dbContext.SaveChangesAsync();
+
+    return Results.Ok("Score saved successfully");
 });
 
 
 
 app.Run();
+
+//Models
+record User(int UserId, string Name, string Email, string Phone, string UserType,string Competition, string Division, string Password, bool IsDeleted);
+record Team(int TeamID, string Name, string Competition, string Division, string Coach);
+record Question(int QuestionID, int SortOrder,string QuestionText, string Competition, bool IsHidden );
+record Score(int ScoreID, int UserID, int QuestionID, int TeamID, string Competition, int ScoreValue);
+
+
+
 
 //Request models
 record LoginRequest(string Email,string Password);
