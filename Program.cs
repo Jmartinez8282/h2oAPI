@@ -58,10 +58,10 @@ app.UseHttpsRedirection();
 
 //Define endpoints
 
-//Login endpoints
+//Login endpoint
 app.MapPost("/api/login",async (AppDbContext dbContext, LoginRequest request) => 
 {
-    var user = dbContext.Users.FirstOrDefault(u => u.Email == request.Email && u.Password == request.Password);
+    var user = await dbContext.Users.FirstOrDefault(u => u.Email == request.Email && u.Password == request.Password);
 
     if(user == null)
     {
@@ -77,6 +77,13 @@ app.MapPost("/api/login",async (AppDbContext dbContext, LoginRequest request) =>
         user.Division,
         Token = token
     });
+});
+
+//Teams endpoint
+app.MapGet("/api/teams", async (AppDbContext dbContext, string competition, string division ) =>
+{
+    var teams = await dbContext.Teams.Where(t => t.Competition == competition && t.Division == division.ToList());
+    return Results.Ok(teams);
 });
 
 
