@@ -61,7 +61,7 @@ app.UseHttpsRedirection();
 //Login endpoint
 app.MapPost("/api/login",async (AppDbContext dbContext, LoginRequest request) => 
 {
-    var user = await dbContext.Users.FirstOrDefault(u => u.Email == request.Email && u.Password == request.Password);
+    var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == request.Email && u.Password == request.Password);
 
     if(user == null)
     {
@@ -85,6 +85,19 @@ app.MapGet("/api/teams", async (AppDbContext dbContext, string competition, stri
     var teams = await dbContext.Teams.Where(t => t.Competition == competition && t.Division == division.ToList());
     return Results.Ok(teams);
 });
+
+//Questions endpoint
+app.MapGet("/api/questions",async (AppDbContext dbContext, int teamId) => 
+{
+    var team = await dbContext.Teams.FirstOrDefaultAsync(t => t.TeamId == teamId);
+    if(team == null)
+    {
+        return Results.BadRequest("Invalid TeamID");
+    }
+    var questions = dbContext.Questions.Where(q => q.Competition == team.Competition).OrderBy(q => q.SortOrder).ToListAsync();
+    return Results.Ok(questions);
+});
+
 
 
 
