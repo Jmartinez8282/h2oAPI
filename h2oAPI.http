@@ -1,0 +1,6 @@
+@h2oAPI_HostAddress = http://localhost:5195
+
+GET {{h2oAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
