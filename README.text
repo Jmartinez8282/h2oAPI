@@ -44,3 +44,8 @@ An API endpoint the lists the teams (filtered based on Competition and Division 
 An API endpoint the lists questions (filtered by the Team’s Competition and order in the SortOrder). 
 An API endpoint to save a score to the tblScores table.
  
+
+ Depencecies installed:
+ dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+dotnet add package Microsoft.AspNetCore.Mvc.Core
