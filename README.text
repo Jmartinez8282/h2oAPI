@@ -1,0 +1,44 @@
+Project Name: H2oScoring
+https://dotnet.microsoft.com/en-us/download/dotnet/9.0
+ 
+Database/EF setup:
+tblUsers:
+UserID
+Name
+Email
+Phone
+UserType (Judge, Admin)
+Competition (Hackathon, Multimedia)
+Division (High School, College)
+Password (Just plain text for this app)
+IsDeleted
+ 
+tblTeams:
+TeamID
+Name
+Competition (Hackathon, Multimedia)
+Division (High School, College)
+Coach
+ 
+tblQuestions:
+QuestionID
+SortOrder
+Question
+Competition (Hackathon, Multimedia)
+IsHidden
+ 
+tblScores:
+ScoreID
+UserID
+QuestionID
+TeamID
+Competition (Hackathon, Multimedia)
+Score
+ 
+Starting with these endpoints:
+ 
+An API endpoint to login a user with email/password and create a JWT session that has a 24 hour expiration.  The JSON response should return UserID, Name, Competition, Division, and a Token property with JWT string.  It should also throw an http error if login is invalid with the error message.
+An API endpoint the lists the teams (filtered based on Competition and Division of the User).
+An API endpoint the lists questions (filtered by the Team’s Competition and order in the SortOrder). 
+An API endpoint to save a score to the tblScores table.
+ 
