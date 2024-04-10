@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("h2oAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e6e6d77854e405e522f9f1f203b807892ae36a5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1caf730f2db6fd46953a76b6af3b9395879a0edf")]
 [assembly: System.Reflection.AssemblyProductAttribute("h2oAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("h2oAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

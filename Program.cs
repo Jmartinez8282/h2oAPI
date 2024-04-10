@@ -1,18 +1,13 @@
-using System;
-using Microsoft.Extensions.Options;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.AspNetCore.Identity.Data;
+
 using h2oAPI.Data;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.SqlServer;
 using h2oAPI.Models;
+using LoginRequest = Microsoft.AspNetCore.Identity.Data.LoginRequest;
+;
 
 
 
@@ -25,7 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 //Configuring my connection string by adding DbContext  and use SQLServer
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer("MyConnectionString"));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //JWT authentication
 builder.Services.AddAuthentication("JWT").AddJwtBearer("JWT", Options =>
@@ -71,13 +66,22 @@ app.UseHttpsRedirection();
 //Define endpoints
 
 //Login endpoint
-app.MapPost("/api/login", async (AppDbContext dbContext, LoginRequest request) =>
+app.MapPost("/api/login", async (AppDbContext dbContext,LoginRequest request) =>
 {
     var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == request.Email && u.Password == request.Password);
 
     if (user == null)
     {
         return Results.BadRequest("Invalid email/password");
+    }
+
+    if (user.UserRole == "Judge")
+    {
+        // Handle judge login
+    }
+    else if (user.UserRole == "Admin")
+    {
+        // Handle admin login
     }
 
     var token = GenerateJWTToken(user);
@@ -88,6 +92,7 @@ app.MapPost("/api/login", async (AppDbContext dbContext, LoginRequest request) =
         user.Name,
         user.Competition,
         user.Division,
+        user.UserRole,
         Token = token
     });
 });
@@ -173,6 +178,6 @@ string GenerateJWTToken(User user)
 
 
 //Request models
-record LoginRequest(string Email, string Password);
-record ScoreRequest(int UserID, int QuestionID, int TeamID, string Competition, int ScoreValue);
+
+
 //Using Minimail API
