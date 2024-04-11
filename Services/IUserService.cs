@@ -7,5 +7,5 @@ namespace h2oAPI.Services;
 
 public interface IUserService
 {
-      public int Register(string username, string password);
+       int Register(string username, string password);
 }

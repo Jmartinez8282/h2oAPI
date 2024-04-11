@@ -7,6 +7,7 @@ using h2oAPI.Data;
 using System.IdentityModel.Tokens.Jwt;
 using h2oAPI.Models;
 using LoginRequest = Microsoft.AspNetCore.Identity.Data.LoginRequest;
+using h2oAPI.Services;
 ;
 
 
@@ -21,7 +22,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Configuring my connection string by adding DbContext  and use SQLServer
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddScoped<IUserService,UserService>();
+builder.Services.AddScoped<IAuthRepository,AuthRepository>();
 //JWT authentication
 builder.Services.AddAuthentication("JWT").AddJwtBearer("JWT", Options =>
 {

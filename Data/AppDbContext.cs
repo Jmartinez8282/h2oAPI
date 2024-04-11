@@ -18,7 +18,7 @@ public class AppDbContext : DbContext
     public DbSet<Question> Questions{ get; set; }
     public DbSet<Score> Scores{ get; set; }
     public DbSet<LoginRequest> LoginRequests { get; set; }
-
+    public DbSet<UserLog> UserLogs { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Define primary key for LoginRequest entity
